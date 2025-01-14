@@ -1,25 +1,25 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
+
 const apiUrl = import.meta.env.VITE_API_URL;
+const apiKey = import.meta.env.VITE_API_KEY;
 
 const GlobalContext = createContext();
-const initialData = { type: "", message: "" };
-const GlobalProvider = ({ children }) => {
-  const [alertData, setAlertData] = useState(initialData);
-  const [ingredientList, setIngredientList] = useState([]);
-  useEffect(() => {
-    //console.log("E' stato eseguito use effect");
-    getIngredients();
-    //return () => console.log("cleanup");
-  }, []);
-  //console.log("E' stato eseguito use effect");
 
-  function getIngredients() {
+const GlobalProvider = ({ children }) => {
+  const [movies, setMovies] = useState([]);
+
+  function getData(query) {
     axios
-      .get(apiUrl + "/ingredients")
+      .get(apiUrl + "search/movie", {
+        params: {
+          api_key: apiKey,
+          query,
+        },
+      })
       .then((res) => {
         //console.log(res.data);
-        setIngredientList(res.data.data);
+        setMovies(res.data.results);
       })
       .catch((error) => {
         console.log(error);
@@ -28,10 +28,16 @@ const GlobalProvider = ({ children }) => {
         // always executed
       });
   }
+
+  function search(query) {
+    getData(query);
+  }
+  const data = {
+    movies,
+    search,
+  };
   return (
-    <GlobalContext.Provider value={{ alertData, setAlertData, ingredientList }}>
-      {children}
-    </GlobalContext.Provider>
+    <GlobalContext.Provider value={data}>{children}</GlobalContext.Provider>
   );
 };
 

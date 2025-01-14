@@ -1,5 +1,27 @@
+.cardWrapper {
+    aspect-ratio: 1/1.5;
+    position: relative;
+    overflow: hidden;
+
+    .cardInner {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: black;
+        color: white;
+        z-index: 2;
+        opacity: 0;
+        transition: all 0.5s;
+        overflow-y: auto;
+    }
+}
+
 .cardImg {
-    aspect-ratio: 16/9;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .cardEffect {
@@ -11,8 +33,16 @@
 .cardEffect:hover {
     scale: 1.2;
     z-index: 1000;
+
+    .cardInner {
+        opacity: 1;
+    }
 }
 
 .isActive {
     border: 5px solid red;
+}
+
+.flag {
+    width: 70px;
 }

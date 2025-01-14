@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import style from "./Card.module.css";
+
+const imgPath = import.meta.env.VITE_iMG_PATH;
 /**
  * Renders a card component with an image, title, badge, and description.
  *
@@ -11,38 +12,25 @@ import style from "./Card.module.css";
  *
  * @returns {JSX.Element} A JSX element representing the card.
  */
-function Card({
-  image = "https://picsum.photos/600/400",
-  title,
-  badge,
-  description = "Descrizione non presente",
-  id,
-  onDelete,
-}) {
-  const [border, setBorder] = useState(false);
-
-  // const [numero, setNumero] = useState(10);
-  function toggleActive() {
-    setBorder(!border);
-    console.log(border);
-  }
-
+const flags = ["de", "en", "es", "it", "fr"];
+function Card({ media }) {
+  const flag = flags.includes(media.original_language)
+    ? media.original_language + ".png"
+    : "placeholder.jpg";
   return (
-    <div
-      className={`card ${style.cardEffect} ${border ? style.isActive : ""}`}
-      onClick={toggleActive}
-    >
+    <div className={`card ${style.cardWrapper} ${style.cardEffect}`}>
       <img
-        src={image}
+        src={imgPath + media.poster_path}
         className={`card-img-top ${style.cardImg}`}
-        alt={title}
+        alt={media.title}
       />
-      <div className="card-body">
-        <h5 className="card-title">{title}</h5>
-        <p className="card-text">{description}</p>
-        <div>{badge}</div>
-        <Link to={`/pizzas/${id}`}>Vedi dettaglio</Link>
-        <button onClick={onDelete}>Delete</button>
+      <div className={`card-body ${style.cardInner}`}>
+        <h5 className="card-title">{media.title}</h5>
+        <p className="card-text">{media.overview}</p>
+        <div className={style.flag}>
+          <img src={`/img/flags/${flag}`} alt={flag} className="img-fluid" />
+        </div>
+        <div>{media.vote_average}</div>
       </div>
     </div>
   );
