@@ -15,7 +15,7 @@ function HeaderComponent() {
     <header>
       <nav className="navbar bg-dark">
         <div className="container-fluid">
-          <h1>BOOLFLIX</h1>
+          <h1 className="bebas-neue-regular">BOOLFLIX</h1>
           <form className="d-flex" role="search">
             <input
               className="form-control me-2"

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { FaStar, FaRegStar } from "react-icons/fa";
 import style from "./Card.module.css";
 
 const imgPath = import.meta.env.VITE_iMG_PATH;
@@ -17,6 +18,19 @@ function Card({ media }) {
   const flag = flags.includes(media.original_language)
     ? media.original_language + ".png"
     : "placeholder.jpg";
+  const drawStars = () => {
+    let stars = [];
+    for (let i = 1; i <= 5; i++) {
+      const star =
+        i <= Math.ceil(media.vote_average / 2) ? (
+          <FaStar key={i} />
+        ) : (
+          <FaRegStar key={i} />
+        );
+      stars.push(star);
+    }
+    return stars;
+  };
   return (
     <div className={`card ${style.cardWrapper} ${style.cardEffect}`}>
       <img
@@ -30,7 +44,7 @@ function Card({ media }) {
         <div className={style.flag}>
           <img src={`/img/flags/${flag}`} alt={flag} className="img-fluid" />
         </div>
-        <div>{media.vote_average}</div>
+        <div className={style.cardStar}>{drawStars()}</div>
       </div>
     </div>
   );
