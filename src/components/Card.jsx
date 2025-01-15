@@ -34,7 +34,11 @@ function Card({ media }) {
   return (
     <div className={`card ${style.cardWrapper} ${style.cardEffect}`}>
       <img
-        src={imgPath + media.poster_path}
+        src={
+          media.poster_path
+            ? imgPath + media.poster_path
+            : "/img/flags/placeholder.jpg"
+        }
         className={`card-img-top ${style.cardImg}`}
         alt={media.title || media.name}
       />
