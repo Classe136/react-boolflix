@@ -2,16 +2,19 @@ import { useState, useEffect } from "react";
 import { useGlobalContext } from "../contexts/GlobalContext";
 import MediaList from "./MediaList";
 function MainComponent() {
-  const { movies } = useGlobalContext();
-  console.log(movies);
+  const { movies, series, isSearching, loading } = useGlobalContext();
+  //console.log(movies);
   return (
     <main className="container-fluid">
-      {movies.length < 1 ? (
+      {!isSearching ? (
         <div className="d-flex container h-100 align-items-center justify-content-center">
           <h2>Prova a cercare un film o una serie tv!</h2>
         </div>
       ) : (
-        <MediaList title="Movies" list={movies} />
+        <>
+          <MediaList title="Movies" list={movies} key="movie" />
+          <MediaList title="TV Series" list={series} key="tv" />
+        </>
       )}
     </main>
   );

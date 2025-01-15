@@ -8,10 +8,14 @@ const GlobalContext = createContext();
 
 const GlobalProvider = ({ children }) => {
   const [movies, setMovies] = useState([]);
+  const [series, setSeries] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
 
-  function getData(query) {
+  function getData(query, endpoint) {
+    setLoading(true);
     axios
-      .get(apiUrl + "search/movie", {
+      .get(apiUrl + "search/" + endpoint, {
         params: {
           api_key: apiKey,
           query,
@@ -19,21 +23,38 @@ const GlobalProvider = ({ children }) => {
       })
       .then((res) => {
         //console.log(res.data);
-        setMovies(res.data.results);
+        if (endpoint === "movie") {
+          //per ogni film chiamare
+          // https://api.themoviedb.org/3/movie/461191/credits
+          setMovies(res.data.results);
+        } else {
+          setSeries(res.data.results);
+        }
       })
       .catch((error) => {
         console.log(error);
       })
       .finally(() => {
-        // always executed
+        setLoading(false);
       });
   }
 
   function search(query) {
-    getData(query);
+    if (!query) {
+      setMovies([]);
+      setSeries([]);
+      setIsSearching(false);
+    } else {
+      getData(query, "movie");
+      getData(query, "tv");
+      setIsSearching(true);
+    }
   }
   const data = {
     movies,
+    series,
+    loading,
+    isSearching,
     search,
   };
   return (

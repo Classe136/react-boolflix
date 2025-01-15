@@ -9,7 +9,12 @@ function HeaderComponent() {
   }
   function handleSearch(e) {
     e.preventDefault();
-    search(query);
+    search(query.trim());
+  }
+  function searchOnEnter(e) {
+    console.log(e);
+    if (!query) search("");
+    if (e.code === "Enter") search(query);
   }
   return (
     <header>
@@ -24,7 +29,9 @@ function HeaderComponent() {
               aria-label="Search"
               name="query"
               id="query"
+              value={query}
               onChange={handleInput}
+              onKeyUp={searchOnEnter}
             />
             <button
               className="btn btn-danger"

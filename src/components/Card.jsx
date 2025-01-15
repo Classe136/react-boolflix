@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { FaStar, FaRegStar } from "react-icons/fa";
 import style from "./Card.module.css";
 
@@ -21,6 +20,7 @@ function Card({ media }) {
   const drawStars = () => {
     let stars = [];
     for (let i = 1; i <= 5; i++) {
+      //voto 1,5
       const star =
         i <= Math.ceil(media.vote_average / 2) ? (
           <FaStar key={i} />
@@ -36,13 +36,21 @@ function Card({ media }) {
       <img
         src={imgPath + media.poster_path}
         className={`card-img-top ${style.cardImg}`}
-        alt={media.title}
+        alt={media.title || media.name}
       />
       <div className={`card-body ${style.cardInner}`}>
-        <h5 className="card-title">{media.title}</h5>
-        <p className="card-text">{media.overview}</p>
+        <h5 className="card-title">{media.title || media.name}</h5>
+        <p className="card-text">
+          {media.overview.length > 400
+            ? media.overview.substring(0, 300) + "..."
+            : media.overview}
+        </p>
         <div className={style.flag}>
-          <img src={`/img/flags/${flag}`} alt={flag} className="img-fluid" />
+          <img
+            src={`/img/flags/${flag}`}
+            alt={media.original_language}
+            className="img-fluid"
+          />
         </div>
         <div className={style.cardStar}>{drawStars()}</div>
       </div>
