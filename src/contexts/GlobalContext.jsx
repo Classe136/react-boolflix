@@ -9,9 +9,10 @@ const GlobalContext = createContext();
 const GlobalProvider = ({ children }) => {
   const [movies, setMovies] = useState([]);
   const [series, setSeries] = useState([]);
+  const [popular, setPopular] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
-
+  useEffect(getPopular, []);
   function getData(query, endpoint) {
     setLoading(true);
     axios
@@ -38,7 +39,26 @@ const GlobalProvider = ({ children }) => {
         setLoading(false);
       });
   }
+  function getPopular() {
+    setLoading(true);
+    axios
+      .get(apiUrl + "movie/popular", {
+        params: {
+          api_key: apiKey,
+        },
+      })
+      .then((res) => {
+        //console.log(res.data);
 
+        setPopular(res.data.results);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }
   function search(query) {
     if (!query) {
       setMovies([]);
@@ -53,6 +73,7 @@ const GlobalProvider = ({ children }) => {
   const data = {
     movies,
     series,
+    popular,
     loading,
     isSearching,
     search,
